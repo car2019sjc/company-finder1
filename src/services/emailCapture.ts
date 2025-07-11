@@ -196,8 +196,12 @@ class ApolloEmailCapture {
 
   // Método principal para buscar emails de uma pessoa
   async searchPersonEmails(personId: string, organizationId?: string): Promise<EmailSearchResponse> {
-    console.log(`🔍 ApolloEmailCapture - searchPersonEmails para ID: ${personId}`);
-    console.log(`🏢 Organization ID: ${organizationId}`);
+    // Logs desabilitados em produção para evitar travamento no Edge
+    const isDev = import.meta.env.DEV;
+    if (isDev) {
+      console.log(`🔍 ApolloEmailCapture - searchPersonEmails para ID: ${personId}`);
+      console.log(`🏢 Organization ID: ${organizationId}`);
+    }
 
     // Validação inicial
     if (!personId || personId.trim() === '') {

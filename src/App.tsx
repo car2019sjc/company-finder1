@@ -12,6 +12,7 @@ import { PeopleSearchModal } from './components/PeopleSearchModal';
 import { PeopleLeadsModal } from './components/PeopleLeadsModal';
 import { BatchEmailCapture } from './components/BatchEmailCapture';
 import { LeadsTable } from './components/LeadsTable';
+import { CorsWarningModal } from './components/CorsWarningModal';
 import { apolloApiService } from './services/apolloApi';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import type { SearchFilters, Company, PeopleSearchFilters, Person as PersonType } from './types/apollo';
@@ -38,6 +39,7 @@ function App() {
   const [isPeopleSearchModalOpen, setIsPeopleSearchModalOpen] = useState(false);
   const [isPeopleLeadsModalOpen, setIsPeopleLeadsModalOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [isCorsWarningOpen, setIsCorsWarningOpen] = useState(false);
 
   // Estado para notificações globais
   const [globalNotification, setGlobalNotification] = useState<{
@@ -90,6 +92,11 @@ function App() {
       setCompanies([]);
       setTotalPages(0);
       setTotalResults(0);
+      
+      // Detectar erro de CORS e mostrar modal
+      if (errorMessage.includes('CORS') || errorMessage.includes('cors')) {
+        setIsCorsWarningOpen(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -719,6 +726,11 @@ function App() {
             onEmailSearch={handleEmailSearch}
           />
         )}
+
+        <CorsWarningModal
+          isOpen={isCorsWarningOpen}
+          onClose={() => setIsCorsWarningOpen(false)}
+        />
 
         {/* Modal de exportação paginada */}
         {isExportModalOpen && (

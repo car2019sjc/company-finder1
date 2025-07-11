@@ -1,7 +1,21 @@
 import type { SearchResponse, SearchFilters, ApiError } from '../types/apollo';
 import type { PeopleSearchResponse, PeopleSearchFilters, EmailSearchResponse, EmailSearchFilters } from '../types/apollo';
 
-const API_BASE_URL = '/api/apollo/v1';
+// Detecta se está em modo desenvolvimento
+const isDevelopment = import.meta.env.DEV;
+
+// URL base adaptativa - usa proxy em dev, direto em prod
+const API_BASE_URL = isDevelopment 
+  ? '/api/apollo/v1'  // Usa proxy em desenvolvimento
+  : 'https://api.apollo.io/v1'; // Direto em produção
+
+// Função para verificar se estamos no GitHub Pages
+const isGitHubPages = window.location.hostname.includes('github.io');
+
+// Se estiver no GitHub Pages, mostrar aviso sobre CORS
+if (isGitHubPages) {
+  console.warn('⚠️ Aplicação rodando no GitHub Pages. Devido a restrições de CORS, as requisições à API Apollo podem falhar. Para melhor experiência, use a aplicação localmente com npm run dev.');
+}
 
 class ApolloApiError extends Error {
   public status: number;
@@ -40,7 +54,13 @@ class ApolloApiService {
       const response = await fetch(url, {
         ...options,
         headers,
+        mode: isDevelopment ? 'cors' : 'no-cors', // Tenta no-cors em produção
       });
+
+      // Em modo no-cors, não podemos ler a resposta
+      if (!isDevelopment && response.type === 'opaque') {
+        throw new Error('CORS_ERROR');
+      }
 
       if (!response.ok) {
         let errorMessage = `Request failed with status ${response.status}`;
@@ -71,8 +91,19 @@ class ApolloApiService {
       const data = await response.json();
       return data;
     } catch (error) {
+      // Tratamento específico para CORS
+      if (error instanceof Error && (error.message === 'CORS_ERROR' || error.message.includes('CORS'))) {
+        const corsMessage = isGitHubPages 
+          ? 'Erro de CORS: A API Apollo.io não permite requisições diretas do GitHub Pages. Por favor, execute a aplicação localmente com "npm run dev" para usar todas as funcionalidades.'
+          : 'Erro de CORS: A API Apollo.io bloqueou a requisição. Por favor, execute a aplicação localmente com "npm run dev".';
+        throw new Error(corsMessage);
+      }
+      
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        throw new Error('Unable to connect to Apollo.io API. Please check your internet connection.');
+        const networkMessage = isGitHubPages
+          ? 'Erro de conexão: Não foi possível conectar à API Apollo.io devido a restrições de CORS. Execute localmente com "npm run dev".'
+          : 'Unable to connect to Apollo.io API. Please check your internet connection.';
+        throw new Error(networkMessage);
       }
       
       if (error instanceof Error) {
@@ -219,7 +250,10 @@ class ApolloApiService {
                                    businessAreaMap[filters.businessArea.toLowerCase()] || 
                                    filters.businessArea.toLowerCase();
       
-      console.log(`🔄 Traduzindo "${filters.businessArea}" para "${translatedBusinessArea}"`);
+      // Reduzir logs em produção
+      if (isDevelopment) {
+        console.log(`🔄 Traduzindo "${filters.businessArea}" para "${translatedBusinessArea}"`);
+      }
       body.q_organization_keyword_tags = [translatedBusinessArea];
     }
 
@@ -231,7 +265,10 @@ class ApolloApiService {
       }
     }
 
-    console.log('📡 Enviando requisição para Apollo API:', body);
+    // Log apenas em desenvolvimento
+    if (isDevelopment) {
+      console.log('📡 Enviando requisição para Apollo API:', body);
+    }
 
     // Tentar primeiro o endpoint mixed_companies/search
     let response: SearchResponse;
