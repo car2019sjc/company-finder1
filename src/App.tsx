@@ -13,6 +13,7 @@ import { PeopleLeadsModal } from './components/PeopleLeadsModal';
 import { BatchEmailCapture } from './components/BatchEmailCapture';
 import { LeadsTable } from './components/LeadsTable';
 import { CorsWarningModal } from './components/CorsWarningModal';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { apolloApiService } from './services/apolloApi';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import type { SearchFilters, Company, PeopleSearchFilters, Person as PersonType } from './types/apollo';
@@ -620,14 +621,16 @@ function App() {
           </div>
         )}
 
-        <SearchForm
-          onSearch={handleSearch}
-          onOpenApiKey={() => setIsApiKeyModalOpen(true)}
-          isLoading={isLoading}
-          hasApiKey={!!apiKey}
-          hasResults={companies.length > 0}
-          onNewSearch={handleNewSearch}
-        />
+        <ErrorBoundary>
+          <SearchForm
+            onSearch={handleSearch}
+            onOpenApiKey={() => setIsApiKeyModalOpen(true)}
+            isLoading={isLoading}
+            hasApiKey={!!apiKey}
+            hasResults={companies.length > 0}
+            onNewSearch={handleNewSearch}
+          />
+        </ErrorBoundary>
 
         {companies.length > 0 && (
           <>
