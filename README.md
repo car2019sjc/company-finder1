@@ -1,52 +1,117 @@
-# Apollo.io Company Search Application
+# Lead Company Finder V1
 
-A React application for searching companies using the Apollo.io API.
+Uma aplicação React moderna para buscar e gerenciar leads de empresas usando a API Apollo.io.
 
-## Setup Instructions
+## 🚀 Demonstração
 
-### 1. Apollo.io API Key
+A aplicação está disponível em: https://car2019sjc.github.io/company-finder1/
 
-1. Sign up for an Apollo.io account with a paid plan (API access requires a paid plan)
-2. Go to your Apollo.io account settings → Integrations → API
-3. Copy your API key
-4. Enter the API key in the application when prompted
+## ✨ Funcionalidades
 
-### 2. Running the Application
+- 🔍 Busca avançada de empresas por diversos critérios
+- 👥 Busca de pessoas dentro das empresas
+- 📧 Captura de e-mails em lote
+- 📊 Visualização detalhada de informações das empresas
+- 💾 Armazenamento local de chaves API
+- 📄 Paginação de resultados
+- 🎨 Interface moderna e responsiva
 
+## 🛠️ Tecnologias Utilizadas
+
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Lucide React (ícones)
+- Apollo.io API
+
+## 📋 Pré-requisitos
+
+- Node.js 18+ 
+- NPM ou Yarn
+- Chave API da Apollo.io
+
+## 🔧 Instalação
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/car2019sjc/company-finder1.git
+cd company-finder1
+```
+
+2. Instale as dependências:
 ```bash
 npm install
+```
+
+3. Execute em modo desenvolvimento:
+```bash
 npm run dev
 ```
 
-The application uses Vite's proxy configuration to handle CORS issues with the Apollo.io API.
+4. Acesse http://localhost:5173
 
-## Features
+## 🔑 Configuração da API
 
-- Search companies by name, location, and employee count
-- View detailed company information including:
-  - Company logo and basic info
-  - Location and employee count
-  - Founded year and revenue
-  - Industry and keywords
-  - Social media links
-- Pagination support for large result sets
-- Responsive design for mobile and desktop
+1. Obtenha uma chave API em [Apollo.io](https://www.apollo.io)
+2. Na aplicação, clique em "Configurar Chave API"
+3. Insira sua chave API
+4. A chave será salva localmente no navegador
 
-## Technical Details
+## 📦 Build para Produção
 
-- Built with React, TypeScript, and Tailwind CSS
-- Uses Vite proxy to handle CORS issues with Apollo.io API
-- Implements proper error handling and loading states
-- Stores API key securely in localStorage
+```bash
+npm run build
+```
 
-## Troubleshooting
+Os arquivos de produção serão gerados na pasta `dist/`.
 
-If you encounter CORS errors:
-1. Make sure you're running the development server (`npm run dev`)
-2. The Vite proxy should handle CORS automatically
-3. Check that your Apollo.io API key is valid and has the necessary permissions
+## 🚀 Deploy
 
-If you get authentication errors:
-1. Verify your Apollo.io API key is correct
-2. Ensure your Apollo.io account has a paid plan (free plans don't include API access)
-3. Check that your API key has the necessary permissions in your Apollo.io account settings
+O deploy é feito automaticamente via GitHub Actions ao fazer push na branch `master`.
+
+### Deploy Manual
+
+1. Faça o build:
+```bash
+npm run build
+```
+
+2. Sirva os arquivos da pasta `dist/` em qualquer servidor web.
+
+## 📝 Estrutura do Projeto
+
+```
+src/
+├── components/       # Componentes React
+├── hooks/           # Custom hooks
+├── services/        # Serviços e APIs
+├── types/           # Tipos TypeScript
+├── App.tsx          # Componente principal
+├── main.tsx         # Entrada da aplicação
+└── index.css        # Estilos globais
+```
+
+## 🤝 Contribuindo
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
+## 👤 Autor
+
+**car2019sjc**
+
+- GitHub: [@car2019sjc](https://github.com/car2019sjc)
+
+## 🙏 Agradecimentos
+
+- Apollo.io pela API
+- Comunidade React
+- Todos os contribuidores
